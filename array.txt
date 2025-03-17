@@ -1,0 +1,49 @@
+class Solution {
+    public long repairCars(int[] ranks, int cars) {
+        int maxRank=Integer.MIN_VALUE;
+        for(int i=0;i<ranks.length;i++)
+        {
+            maxRank=Math.max(maxRank,ranks[i]);
+        }
+        long max = (long) maxRank * cars * cars;
+
+        return bs(1,max,ranks,cars);
+    }
+
+    public long bs(long l, long r, int[] ranks, int cars)
+    {
+        
+        long mid=(l+r)/2;
+
+        if(l>=r)
+        {
+            return mid;
+        }
+        
+        if(valid(mid,ranks,cars)==true)
+        {
+            return bs(l,mid,ranks,cars);
+        }
+        else
+        {
+            return bs(mid+1,r,ranks,cars);
+        }
+    }
+
+    class Solution {
+    public boolean divideArray(int[] nums) {
+        HashMap<Integer,Integer>mp = new HashMap<>();
+        for(int i=0;i<nums.length;i++)
+        {
+            mp.put(nums[i],mp.getOrDefault(nums[i],0)+1);
+        }
+        for(Map.Entry<Integer,Integer>entry:mp.entrySet())
+        {
+            if(entry.getValue()%2!=0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
