@@ -1,0 +1,55 @@
+class Solution {
+    public int[] minimumCost(int n, int[][] edges, int[][] query) {
+        DSU dsu=new DSU(n);
+        for(int[] edge:edges){
+            dsu.union(edge[0],edge[1]);
+        }
+        int[] compCost=new int[n];
+        Arrays.fill(compCost,Integer.MAX_VALUE);
+        for(int[] edge:edges){
+            int parent=dsu.find(edge[0]);
+            compCost[parent]=compCost[parent]&edge[2];
+        }
+        int[] ans=new int[query.length];
+        int i=0;
+        for(int[] walk:query){
+            int rootParentFirst=dsu.find(walk[0]);
+            int rootParentSecond=dsu.find(walk[1]);
+
+            if(rootParentFirst==rootParentSecond){
+                ans[i++]=compCost[rootParentFirst];
+            }else{
+                ans[i++]=-1;
+            }
+        }
+        return ans;
+    }
+}
+class DSU{
+    int[] parent;
+    int[] rank;
+    public DSU(int n){
+        parent=new int[n];
+        rank=new int[n];
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+    }
+    public int find(int x){
+        if(parent[x]==x) return x;
+        parent[x]=find(parent[x]);
+        return parent[x];
+    }
+    public void union(int x,int y){
+        int x_rep=find(x);
+        int y_rep=find(y);
+
+        if(x_rep==y_rep) return ;
+        else if(rank[x_rep]<rank[y_rep]) parent[x_rep]=y_rep;
+        else if(rank[x_rep]>rank[y_rep]) parent[y_rep]=x_rep;
+        else{
+            parent[y_rep]=x_rep;
+            rank[x_rep]++;
+        }
+    }
+}
